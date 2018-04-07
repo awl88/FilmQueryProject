@@ -16,6 +16,9 @@ public class Actor {
 	public String toString() {
 		return "Actor [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
+	public String viewString() {
+		return "Actor ID: " + id + " | " + lastName + ", " + firstName;
+	}
 	public int getId() {
 		return id;
 	}
