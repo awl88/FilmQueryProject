@@ -12,7 +12,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	private static String user = "student";
 	private static String pass = "student";
 
-	public List<Film> search(String userInput) throws SQLException {
+	public List<Film> getFilmByKeyword(String userInput) throws SQLException {
         List<Film> films = new ArrayList<>();
 		try {
 			String user = "student";
@@ -20,8 +20,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT f.id, f.title, f.description, f.release_year, f.rating, l.name "
 					+ "FROM film f JOIN language l ON f.language_id = l.id "
-					+ "JOIN film_actor fa ON f.id = fa.film_id "
-					+ "JOIN actor a ON fa.actor_id = a.id "
 					+ "WHERE f.title LIKE ? OR f.description LIKE ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + userInput + "%");
@@ -68,8 +66,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT f.id, f.title, f.description, f.release_year, f.rating, l.name "
 					+ "FROM film f JOIN language l ON f.language_id = l.id "
-					+ "JOIN film_actor fa ON f.id = fa.film_id "
-					+ "JOIN actor a ON fa.actor_id = a.id "
 					+ "WHERE f.id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -106,34 +102,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 
 	@Override
-	public Actor getActorById(int actorId) throws SQLException {
-		Actor actor = null;
-		try {
-			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, actorId);
-			ResultSet actorResult = stmt.executeQuery();
-
-			if (actorResult.next()) {
-				actor = new Actor(); // Create the object
-				// Here is our mapping of query columns to our object fields:
-				actor.setId(actorResult.getInt(1));
-				actor.setFirstName(actorResult.getString(2));
-				actor.setLastName(actorResult.getString(3));
-			}
-			
-			actorResult.close();
-			stmt.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			// Return the object
-		}
-		return actor;
-	}
-
-	@Override
 	public List<Actor> getActorsByFilmId(int filmId) {
 		List<Actor> actors = new ArrayList<>();
 		try {
@@ -146,7 +114,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Actor actor = new Actor();
-				actor.setId(1);
+				actor.setId(rs.getInt(1));
 				actor.setFirstName(rs.getString(2));
 				actor.setLastName(rs.getString(3));
 				actors.add(actor);

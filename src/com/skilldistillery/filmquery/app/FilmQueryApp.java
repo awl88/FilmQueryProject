@@ -14,7 +14,7 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
-//		app.test();
+		// app.test();
 		app.launch();
 	}
 
@@ -33,7 +33,7 @@ public class FilmQueryApp {
 
 	private void startUserInterface(Scanner input) throws SQLException {
 		System.out.println("~~Welcome~~");
-		
+
 		while (true) {
 			System.out.println("Please select one of the follow:");
 			System.out.println("1. Look up film by ID");
@@ -49,20 +49,18 @@ public class FilmQueryApp {
 			} else if (choice == 2) {
 				System.out.print("Please enter a search keyword: ");
 				String keyword = input.next();
-				List<Film> films = db.search(keyword);
+				List<Film> films = db.getFilmByKeyword(keyword);
 				for (int i = 0; i < films.size(); i++) {
 					films.get(i).viewString();
 				}
 				System.out.println();
-				db.search(keyword);
 			} else if (choice == 0) {
 				System.out.println("Goodbye!");
 				break;
 			} else {
 				System.out.println("Not a valid option, try again.");
 				continue;
-			} 
+			}
 		}
 	}
-
 }

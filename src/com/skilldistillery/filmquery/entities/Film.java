@@ -33,12 +33,14 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 	}
+	
 	public void viewString() {
 		System.out.println("Film Id: " + id + " | Title: " + title + " | Release Year: " + releaseYear + " | Rating: " + rating + " | Language " + language
 				+ "\n Description: " + description + "\n Actors: ");
 		getActorNames();
 		System.out.println();
 	}
+	
 	public void getActorNames() {
 		for (int i = 0; i < actors.size(); i++) {
 			System.out.println(actors.get(i).viewString());
